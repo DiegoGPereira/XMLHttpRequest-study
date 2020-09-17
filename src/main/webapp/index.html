@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Title</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="Assets/css/uikit.min.css" />
+    </head>
+    <body>
+        <header>
+            <nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
+                <div class="uk-navbar-left">
+                    <ul class="uk-navbar-nav">
+                        <li class="uk-active"><a href="#">Home</a></li>
+                        <li><a href="#">Cities</a></li>
+                        <li>
+                            <a href="#">Parent</a>
+                            <div class="uk-navbar-dropdown">
+                                <ul class="uk-nav uk-navbar-dropdown-nav">
+                                    <li class="uk-active"><a href="#">List Cities</a></li>
+                                </ul>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <div class="uk-navbar-right">
+                    <ul class="uk-navbar-nav">
+                        <li><a class="uk-button uk-button-default" href="#modal-login" uk-toggle>Login</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <div class="uk-child-width uk-dark" uk-grid>
+                <div>
+                    <div class="uk-background-cover uk-height-large uk-panel uk-flex uk-flex-center uk-flex-middle" style="background-image: url(Assets/images/light.jpg);">
+                        <p id="este" class="uk-h4">Ajax Studies</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <br> <br>
+
+            <div class="uk-container"> 
+                <div class="uk-child-width-1-3@m uk-grid-small uk-grid-match" uk-grid>
+                    <div>
+                        <div class="uk-card uk-card-small uk-card-hover uk-card-default">
+                            <div class="uk-card-media-top">
+                                <img src="Assets/images/book.jpg" alt=""/>
+                            </div>
+                            <div class="uk-card-body">
+                                <h3 class="uk-card-title">Media Top</h3>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="uk-card uk-card-small uk-card-hover uk-card-default">
+                            <div class="uk-card-media-bottom">
+                                <img src="Assets/images/build.jpg" alt=""/>
+                            </div>
+                            <div class="uk-card-body">
+                                <h3 class="uk-card-title">Media Bottom</h3>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="uk-card uk-card-small uk-card-hover uk-card-default">
+                            <div class="uk-card-media-top">
+                                <img src="Assets/images/book.jpg" alt=""/>
+                            </div>
+                            <div class="uk-card-body">
+                                <h3 class="uk-card-title">Media Top</h3>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- MODAL -->
+        <div id="modal-login" class="uk-modal-full" uk-modal>
+            <div class="uk-modal-dialog">
+                <button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
+                <div class="uk-grid-collapse uk-child-width-1-2@s uk-flex-middle" uk-grid>
+                    <div class="uk-background-cover" style="background-image: url('Assets/images/build.jpg');" uk-height-viewport></div>
+                    <div class="uk-padding-large">
+
+                        <form id="loginform">
+                            <fieldset class="uk-fieldset">
+                                <legend class="uk-legend">Login</legend>
+                                <div class="uk-margin">
+                                    <input class="uk-input" name="username" type="text" placeholder="Username">
+                                </div>
+                                <div class="uk-margin">
+                                    <input class="uk-input" name="password" type="password" placeholder="Password">
+                                </div>
+                                <p uk-margin>
+                                    <button class="uk-button uk-button-primary" type="button" onClick="XHRPost();">Login</button>
+                                    <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+                                </p>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- FIM DO MODAL -->
+
+        <script>
+            function XHRPost() {
+                var xhttp = null;
+                if (window.XMLHttpRequest) {
+                    //code for modern browsers
+                    xhttp = new XMLHttpRequest();
+                } else {
+                    // code for old IE browsers
+                    xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+
+                var form = document.getElementById("loginform"),
+                        formData = null;
+
+                formData = new FormData(form);
+
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 3) {
+                        console.log("Processando");
+                    }
+                    if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById("este").innerHTML = this.responseText;
+                        UIkit.modal(document.getElementById("modal-login")).hide();
+                    }
+                };
+
+                //envia multipart a servlet precisa estar com a anotação.
+                xhttp.open("POST", "Servlet", true);
+                xhttp.send(formData);
+            }
+        </script>
+
+        <script src="Assets/js/uikit.min.js"></script>
+        <script src="Assets/js/uikit-icons.min.js"></script>
+    </body>
+</html>

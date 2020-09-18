@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ajax</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="Assets/css/uikit.min.css" />
+        <link rel="stylesheet" href="Assets/css/loader.css"/>
+    </head>
+    <body>
+        <header>
+            <nav class="uk-navbar-container uk-animation-slide-left-small" uk-navbar>
+                <div class="uk-navbar-left">
+                    <ul class="uk-navbar-nav">
+                        <li class="uk-active"><a href="index.html">Home</a></li>
+
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <br><br>
+
+        <main>
+            <div class="uk-container">
+                <div class="uk-overflow-auto">
+                    <table id="userlist" class="uk-table uk-table-small uk-table-divider uk-table-striped">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Password</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- dynamic fill -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="loader" style="display: none;">
+                    <span class="loader"></span>
+                </div>
+            </div>
+        </main>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                listAll();
+            });
+
+            function listAll() {
+                var xhttp = null;
+                if (window.XMLHttpRequest) {
+                    //code for modern browsers
+                    xhttp = new XMLHttpRequest();
+                } else {
+                    // code for old IE browsers
+                    xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+
+                xhttp.onreadystatechange = function () {
+
+                    if (this.readyState == 3) {
+                        document.getElementById("loader").style.display = "block";
+                    }
+
+                    if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById("loader").style.display = "none";
+
+                        var c = document.getElementById("userlist").children;
+                        c[1].innerHTML = this.responseText;
+                    }
+                };
+
+                //envia multipart a servlet precisa estar com a anotação.
+                xhttp.open("GET", 'UsersList', true);
+                xhttp.send();
+            }
+
+            function remove(id) {
+                var xhttp = null;
+                if (window.XMLHttpRequest) {
+                    //code for modern browsers
+                    xhttp = new XMLHttpRequest();
+                } else {
+                    // code for old IE browsers
+                    xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+
+                var data = new FormData();
+                data.append('id', id);
+
+                xhttp.onreadystatechange = function () {
+
+                    if (this.readyState == 3) {
+                        document.getElementById("loader").style.display = "block";
+                    }
+
+                    if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById("loader").style.display = "none";
+                        listAll();
+
+                        UIkit.notification({
+                            message: this.responseText,
+                            status: 'success',
+                            pos: 'top-right',
+                            timeout: 3000
+                        });
+                    }
+                };
+
+                //envia multipart a servlet precisa estar com a anotação.
+                xhttp.open("POST", 'Delete', true);
+                xhttp.send(data);
+            }
+        </script>
+
+        <script src="Assets/js/uikit.min.js"></script>
+        <script src="Assets/js/uikit-icons.min.js"></script>
+    </body>
+</html>
+
+
+
+
+

@@ -1,1 +1,5 @@
-com\diego\ajax\Controle\Servlet.class
+com\diego\ajax\Utils\Conn.class
+com\diego\ajax\Model\Cities.class
+com\diego\ajax\DAO\UsersDAO.class
+com\diego\ajax\Model\Users.class
+com\diego\ajax\Control\Servlet.class

@@ -1,31 +1,26 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Title</title>
+        <title>Ajax</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="Assets/css/uikit.min.css" />
+        <link rel="stylesheet" href="Assets/css/loader.css"/>
     </head>
     <body>
         <header>
-            <nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
+            <nav class="uk-navbar-container uk-animation-slide-left-small" uk-navbar>
                 <div class="uk-navbar-left">
                     <ul class="uk-navbar-nav">
-                        <li class="uk-active"><a href="#">Home</a></li>
-                        <li><a href="#">Cities</a></li>
-                        <li>
-                            <a href="#">Parent</a>
-                            <div class="uk-navbar-dropdown">
-                                <ul class="uk-nav uk-navbar-dropdown-nav">
-                                    <li class="uk-active"><a href="#">List Cities</a></li>
-                                </ul>
-                            </div>
-                        </li>
-
+                        <li class="uk-active"><a href="index.html">Home</a></li>
+                        <li class="uk-active"><a href="users.html">Users</a></li>
                     </ul>
                 </div>
 
                 <div class="uk-navbar-right">
+                    <ul class="uk-navbar-nav">
+                        <li><a class="uk-button uk-button-default" href="#modal-register" uk-toggle>Register</a></li>
+                    </ul>
                     <ul class="uk-navbar-nav">
                         <li><a class="uk-button uk-button-default" href="#modal-login" uk-toggle>Login</a></li>
                     </ul>
@@ -37,13 +32,16 @@
             <div class="uk-child-width uk-dark" uk-grid>
                 <div>
                     <div class="uk-background-cover uk-height-large uk-panel uk-flex uk-flex-center uk-flex-middle" style="background-image: url(Assets/images/light.jpg);">
-                        <p id="este" class="uk-h4">Ajax Studies</p>
+
+                        <div id="loader" style="display: none;">
+                            <span class="loader"></span>
+                        </div>
                     </div>
+
                 </div>
             </div>
 
-
-            <br> <br>
+            <br><br>
 
             <div class="uk-container"> 
                 <div class="uk-child-width-1-3@m uk-grid-small uk-grid-match" uk-grid>
@@ -84,7 +82,7 @@
             </div>
         </main>
 
-        <!-- MODAL -->
+        <!-- MODAL LOGIN -->
         <div id="modal-login" class="uk-modal-full" uk-modal>
             <div class="uk-modal-dialog">
                 <button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
@@ -102,7 +100,7 @@
                                     <input class="uk-input" name="password" type="password" placeholder="Password">
                                 </div>
                                 <p uk-margin>
-                                    <button class="uk-button uk-button-primary" type="button" onClick="XHRPost();">Login</button>
+                                    <button class="uk-button uk-button-primary" type="button" onClick="XHRPost('loginform', 'Login');">Login</button>
                                     <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
                                 </p>
                             </fieldset>
@@ -113,8 +111,38 @@
         </div>
         <!-- FIM DO MODAL -->
 
+        <!-- MODAL REGISTER -->
+        <div id="modal-register" class="uk-modal-full" uk-modal>
+            <div class="uk-modal-dialog">
+                <button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
+                <div class="uk-grid-collapse uk-child-width-1-2@s uk-flex-middle" uk-grid>
+                    <div class="uk-background-cover" style="background-image: url('Assets/images/build.jpg');" uk-height-viewport></div>
+                    <div class="uk-padding-large">
+
+                        <form id="registerform">
+                            <fieldset class="uk-fieldset">
+                                <legend class="uk-legend">Register</legend>
+                                <div class="uk-margin">
+                                    <input class="uk-input" name="username" type="text" placeholder="Username">
+                                </div>
+                                <div class="uk-margin">
+                                    <input class="uk-input" name="password" type="password" placeholder="Password">
+                                </div>
+                                <p uk-margin>
+                                    <button class="uk-button uk-button-primary" type="button" onClick="XHRPost('registerform', 'Register');">Register</button>
+                                    <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+                                </p>
+                            </fieldset>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- FIM DO MODAL -->
+
         <script>
-            function XHRPost() {
+            function XHRPost(form, endpoint) {
                 var xhttp = null;
                 if (window.XMLHttpRequest) {
                     //code for modern browsers
@@ -124,23 +152,33 @@
                     xhttp = new ActiveXObject("Microsoft.XMLHTTP");
                 }
 
-                var form = document.getElementById("loginform"),
+                var form = document.getElementById(form),
                         formData = null;
 
                 formData = new FormData(form);
 
                 xhttp.onreadystatechange = function () {
+                    UIkit.modal(document.getElementById("modal-register")).hide();
+                    UIkit.modal(document.getElementById("modal-login")).hide();
+
                     if (this.readyState == 3) {
-                        console.log("Processando");
+                        document.getElementById("loader").style.display = "block";
                     }
+
                     if (this.readyState == 4 && this.status == 200) {
-                        document.getElementById("este").innerHTML = this.responseText;
-                        UIkit.modal(document.getElementById("modal-login")).hide();
+                        document.getElementById("loader").style.display = "none";
+
+                        UIkit.notification({
+                            message: this.responseText,
+                            status: 'success',
+                            pos: 'top-right',
+                            timeout: 3000
+                        });
                     }
                 };
 
                 //envia multipart a servlet precisa estar com a anotação.
-                xhttp.open("POST", "Servlet", true);
+                xhttp.open("POST", endpoint, true);
                 xhttp.send(formData);
             }
         </script>
